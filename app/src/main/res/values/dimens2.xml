@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Movie list item values -->
+    <dimen name="li_movie_height">108dp</dimen>
+    <dimen name="spacing_s">4dp</dimen>
+</resources>
