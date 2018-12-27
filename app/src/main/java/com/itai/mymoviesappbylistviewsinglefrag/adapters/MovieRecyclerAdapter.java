@@ -16,7 +16,7 @@ import java.util.ArrayList;
 //4.12.18
 
 public class MovieRecyclerAdapter extends RecyclerView.Adapter<MovieRecyclerAdapter.ViewHolder> {
-    private ArrayList<MovieModel> dataArray = new ArrayList<>();
+    private ArrayList<MovieModel> dataArray;
     private PagerListener listener;
 
     public MovieRecyclerAdapter(ArrayList<MovieModel> dataArray,PagerListener listener) {

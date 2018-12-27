@@ -1,6 +1,5 @@
 package com.itai.mymoviesappbylistviewsinglefrag;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,86 +7,40 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.itai.mymoviesappbylistviewsinglefrag.adapters.MovieRecyclerAdapter;
+import com.itai.mymoviesappbylistviewsinglefrag.fragments.DetailFragment;
 import com.itai.mymoviesappbylistviewsinglefrag.model.MovieModel;
-import com.itai.mymoviesappbylistviewsinglefrag.utils.FragmentFactory;
-import com.itai.mymoviesappbylistviewsinglefrag.utils.MyApp;
 
 import java.util.ArrayList;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements DetailFragment.FragmentListener {
     private static final int SIZE = 2;
-    private Context context = MyApp.getContext();
     private ViewPager viewPager;
     protected ScreenSlidePagerAdapter pagerAdapter;
     private static final String FRAG_MODEL = "FRAG_MODEL";//Bundle KEY
     private static final String MOVIE_LIST = "movieList";
-    private static final String MOVIE_PAGER = "movieToPager";
-
-    private ArrayList<MovieModel> modelData = null;
-//    private RecyclerView mRecyclerView;
-//    private MovieRecyclerAdapter mAdapter;
-
-
-
+    private  final  String MOVIE_DATA = "movie" ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-
-        //transferring the movie array list
-
-        modelData = loadMovies();
-
-        //todo lookup how to check this
-        //  mRecyclerView = findViewById(R.id.movies_ls);
-
-        //   mRecyclerView.setHasFixedSize(true);
-
-        // use a linear layout manager - vertical type recycling
-        //   RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-        //   mRecyclerView.setLayoutManager(mLayoutManager);
-
-
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-
-        //coupling mAdapter with RecyclerAdapter
-
-       /* mAdapter = new MovieRecyclerAdapter(modelData, new PageList());
-        mRecyclerView.setAdapter(mAdapter);
-        mAdapter.notifyDataSetChanged();
-*/
-
+        System.out.println("Lol!!");
+        Log.d("MyTag", "MyLogMessage");
 
         viewPager = findViewById(R.id.pager); //fragment layout replaced by pager layout
-        pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+        pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(), loadMovies());
         viewPager.setAdapter(pagerAdapter);
-        //creates the fragments
-        pagerAdapter.createOne(modelData.get(0));
-        pagerAdapter.gotoFragment(modelData.get(0));
-    }
+        Intent movieFromList = getIntent();
+        MovieModel movieFrom = movieFromList.getParcelableExtra(MOVIE_DATA);
 
-
-            //todo insert movie name
-
-
-
-
-   /* class PageList implements MovieRecyclerAdapter.PagerListener {
-
-        @Override
-        public void gotoFragmentListener(MovieModel movie) {
-            pagerAdapter.gotoFragment(modelData.get(0));
+        int index = loadMovies().indexOf(movieFrom); // movieModels.indexOf();
+        if(-1 != index){
+            viewPager.setCurrentItem(index);
         }
+        // throw new Exception("my exception message");
     }
-*/
+
     private ArrayList<MovieModel> loadMovies() {
 
         ArrayList<MovieModel> movies = new ArrayList<>(9);
@@ -146,9 +99,6 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
-
-
-
     @Override  //3.12.18
     public void onBackPressed() {
         if (viewPager.getCurrentItem() == 0) {
@@ -161,59 +111,30 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void returnToList() {
+        Intent returnTo = new Intent(this,MoviesActivity.class);
+        startActivity(returnTo);
+    }
+
     //20.12.18
     class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
-        Fragment fragments[] = new Fragment[SIZE];
-//        private ArrayList<Fragment> fragments = new ArrayList<>();
-//        private ArrayList<MovieModel> mList;
+        private final ArrayList<MovieModel> movieModels;
 
         //constructor
-        public ScreenSlidePagerAdapter(FragmentManager manager) {
+        public ScreenSlidePagerAdapter(FragmentManager manager, ArrayList<MovieModel> movieModels) {
             super(manager);
+            this.movieModels = movieModels;
         }
 
         @Override
         public Fragment getItem(int position) {
-            return fragments[position];
+            return DetailFragment.newInstance(movieModels.get(position));
         }
 
         @Override
         public int getCount() {
-            return fragments.length;
+            return movieModels == null ? 0 : movieModels.size();
         }//pager function
-
-        public Fragment[] createOne(MovieModel movie) {
-            fragments[0]=FragmentFactory.newInstance(movie);
-            return fragments;
-        }
-
-
-        public void gotoFragment(MovieModel movie) {
-
-            viewPager.getCurrentItem();
-
-            }
-        }
     }
-//todo check out no in use methods
-     /* public ArrayList<Fragment> createFragmentArray() {
-            int fSize = mList.size();
-            for (int idx = 0; idx < fSize; idx++) {
-                fragments.add(FragmentFactory.newInstance(mList.get(idx)));
-            }
-            return fragments;*/
-
-
-
-
- //   public void gotoFragment(MovieModel movie)
- //MovieModel tmpMovie;
-//            for (Fragment frag : fragments) {
-//                //todo check if not a problem
-//                tmpMovie = ((MovieModel) frag.getArguments().getSerializable(FRAG_MODEL));
-//                if (TextUtils.equals(movie.getName(), tmpMovie.getName())) {
-//                    int frag_num = viewPager.getCurrentItem();
-//                    pagerAdapter.getItem(frag_num);
-//                } else
-//                    Toast.makeText(DetailActivity.this, "Movie could not be found", Toast.LENGTH_LONG).show();
-
+}

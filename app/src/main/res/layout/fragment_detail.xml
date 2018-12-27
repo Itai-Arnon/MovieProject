@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".adapters.MovieRecyclerAdapter">
+    tools:context="fragments.DetailFragment">
 
 
     <ImageView
@@ -15,33 +15,16 @@
         tools:src="@drawable/baby_alien"
         android:contentDescription="Permanent Image"
         />
-
-
-    <ImageView
-        android:id="@+id/little_poster"
-        android:layout_width="120dp"
-        android:layout_height="80dp"
-        tools:src="@drawable/baby_alien"
-        android:layout_below="@+id/big_poster"
-        android:contentDescription="Permanent Image"
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below = "@id/big_poster"
+        android:gravity="center"
+        tools:text="Baby Alien by Predator"
+        android:textSize="22sp"
         />
 
-    <LinearLayout
-        android:id="@+id/first_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/big_poster"
-        android:layout_toLeftOf="@+id/little_poster"
-        android:orientation="vertical">
-
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="Baby Alien versus Baby Predator"
-            android:textSize="22sp"
-            />
 
         <!--<TextView-->
             <!--android:id="@+id/release_date"-->
@@ -65,14 +48,22 @@
             <!--android:layout_height="wrap_content"-->
             <!--/>-->
 
-    </LinearLayout>
+
 
     <TextView
         android:id="@+id/overview"
-        android:layout_below="@+id/first_text"
+        android:layout_below="@id/title"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        tools:text = "Blah Blah"
+        android:layout_height="200dp"/>
+        <!--android:maxHeight="200dp"-->
+
+    <Button
+        android:id="@+id/return_to_list"
+        android:text = "Back To List"
+        android:layout_below="@id/overview"
         android:textSize="12sp"
-        />
+        android:layout_width ="match_parent"
+        android:layout_height ="wrap_content"
+    />
+
 </RelativeLayout>
